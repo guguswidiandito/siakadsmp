@@ -18,7 +18,9 @@ class MapelController extends Controller
     public function index()
     {
         $data['kelas'] = Kelas::pluck('kelas', 'id');
-        $data['mapel'] = $this->model->where('kelas_id', array($this->request['kelas_id']))->orderBy('mapel')->get();
+        $data['mapel'] = $this->model->where('kelas_id', array($this->request['kelas_id']))
+            ->orderBy('mapel')
+            ->get();
 
         return view('mapel.index', $data);
     }
@@ -41,12 +43,10 @@ class MapelController extends Controller
 
         $mapel = new Mapel($this->request->all());
 
-        if ($this->existsMapel() == 1) {
-            return redirect()->back()
-                ->with('fail', 'Mapel ' . $this->request['mapel'] . ' dengan guru dan kelas yang anda input sudah ada');
-        } elseif ($this->existsGuru() == 1) {
-            return redirect()->back()
-                ->with('fail', 'Mapel ' . $this->request['mapel'] . ' dengan guru dan kelas yang anda input sudah ada');
+        if ($this->existsMapel($this->request) == 1) {
+            return $this->redirect($this->request['mapel']);
+        } elseif ($this->existsGuru($this->request) == 1) {
+            return $this->redirect($this->request['mapel']);
         } else {
             $mapel->save();
 
@@ -88,18 +88,24 @@ class MapelController extends Controller
             ->with('success', 'Mapel berhasil dihapus');
     }
 
-    protected function existsMapel()
+    protected function existsMapel($request)
     {
-        return $this->model->where('mapel', $this->request['mapel'])
-            ->where('kelas_id', $this->request['kelas_id'])
-            ->where('user_id', $this->request['user_id'])
+        return $this->model->where('mapel', $request['mapel'])
+            ->where('kelas_id', $request['kelas_id'])
+            ->where('user_id', $request['user_id'])
             ->count();
     }
 
-    protected function existsGuru()
+    protected function existsGuru($request)
     {
-        return $this->model->where('mapel', $this->request['mapel'])
-            ->where('kelas_id', $this->request['kelas_id'])
+        return $this->model->where('mapel', $request['mapel'])
+            ->where('kelas_id', $request['kelas_id'])
             ->count();
+    }
+
+    protected function redirect($data)
+    {
+        return redirect()->back()
+            ->with('fail', 'Mapel ' . $data . ' dengan guru dan kelas yang anda input sudah ada');
     }
 }
