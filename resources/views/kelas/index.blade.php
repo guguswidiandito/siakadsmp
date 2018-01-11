@@ -28,11 +28,11 @@
                                         @if (count($kelas) > 0)
                                         @foreach ($kelas as $k)
                                         <tr>
-                                            <td class="text-center">{{ $k['kelas'] }}</td>
-                                            <td class="text-center">{{ $k['nama'] }}</td>
+                                            <td class="text-center">{{ $k['nama_kelas'] }}</td>
+                                            <td class="text-center">{{ $k['nama_guru'] }}</td>
                                             <td class="text-center">
-                                                {!! Form::model($k, ['route' => ['kelas.destroy', $k['id']], 'method' => 'DELETE']) !!}
-                                                <a href="{{ route('kelas.edit', $k['id']) }}" class="btn btn-xs btn-primary">Edit</a>
+                                                {!! Form::model($k, ['route' => ['kelas.destroy', $k['kelas_id']], 'method' => 'DELETE']) !!}
+                                                <a href="{{ route('kelas.edit', $k['kelas_id']) }}" class="btn btn-xs btn-primary">Edit</a>
                                                 <button class="btn btn-xs btn-danger">Hapus</button>
                                                 {!! Form::close() !!}
                                             </td>

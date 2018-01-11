@@ -54,26 +54,10 @@ class NilaiController extends Controller
 
     public function store()
     {
-        $this->validate($this->request, [
-            'harian' => 'between:0,100|required',
-            'uts'    => 'between:0,100|required',
-            'uas'    => 'between:0,100|required',
-        ]);
 
         $request = $this->request->except('_token');
 
-        foreach ($this->request->get('nis') as $nis) {
-
-            Auth::user()->menilai()->attach([
-                $nis => [
-                    'harian'       => $request['harian'][$nis],
-                    'uts'          => $request['uts'][$nis],
-                    'uas'          => $request['uas'][$nis],
-                    'tahun_ajaran' => $request['tahun_ajaran'],
-                    'mapel_id'     => $request['mapel_id'],
-                ],
-            ]);
-        }
+        $this->save($request);
 
         return redirect()->back()
             ->with('success', 'Nilai berhasil disimpan!');
@@ -103,5 +87,33 @@ class NilaiController extends Controller
         return Mapel::where('user_id', Auth::id())
             ->where('kelas_id', $this->request['kelas'])
             ->get();
+    }
+
+    protected function save($request)
+    {
+        foreach ($request['nis'] as $nis) {
+
+            // $this->validate($this->request, [
+            //     'harian' . $nis  => 'required|numeric|between:0,100',
+            //     'uts' . $nis    => 'required|numeric|between:0,100',
+            //     'uas' . $nis     => 'required|numeric|between:0,100',
+            // ]);
+
+            Auth::user()->menilai()->attach([
+                $nis => [
+                    'harian'       => $request['harian'][$nis],
+                    'uts'          => $request['uts'][$nis],
+                    'uas'          => $request['uas'][$nis],
+                    'tahun_ajaran' => $request['tahun_ajaran'],
+                    'mapel_id'     => $request['mapel_id'],
+                ],
+            ]);
+        }
+    }
+
+    protected function redirect(array $data)
+    {
+        return redirect()->back()
+            ->with('fail', 'field' . $data . ' tidak boleh kosong');
     }
 }

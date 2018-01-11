@@ -112,6 +112,13 @@
                 </div>
             </div>
             @endif
+            @if (Session::has('fail'))
+            <div class="container">
+                <div class="alert alert-danger">
+                    <b>Error!</b> {{ Session::get('fail') }}
+                </div>
+            </div>
+            @endif
             @stack('error')
             @yield('content')
         </div>

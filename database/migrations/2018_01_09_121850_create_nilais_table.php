@@ -18,9 +18,9 @@ class CreateNilaisTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('siswa_id');
             $table->integer('mapel_id')->unsigned();
-            $table->decimal('harian');
-            $table->decimal('uts');
-            $table->decimal('uas');
+            $table->integer('harian')->unsigned()->nullable();
+            $table->integer('uts')->unsigned()->nullable();
+            $table->integer('uas')->unsigned()->nullable();
             $table->string('tahun_ajaran');
         });
     }

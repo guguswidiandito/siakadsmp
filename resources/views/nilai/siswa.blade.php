@@ -89,9 +89,9 @@
                                                     <input type="hidden" name="nis['{{ $s['nis'] }}']" value="{{ $s['nis'] }}">
                                                 </td>
                                                 <td>{{ $s['nama'] }}</td>
-                                                <td class="text-center">{!! Form::number('harian['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'Harian', 'min' => 0, 'max' => 100]) !!}</td>
-                                                <td class="text-center">{!! Form::number('uts['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'UTS', 'min' => 0, 'max' => 100]) !!}</td>
-                                                <td class="text-center">{!! Form::number('uas['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'UAS', 'min' => 0, 'max' => 100]) !!}</td></td>
+                                                <td class="text-center">{!! Form::number('harian['.$s['nis'].']', 0, ['class' => 'form-control', 'placheholder' => 'Harian', 'min' => 0, 'max' => 100]) !!}</td>
+                                                <td class="text-center">{!! Form::number('uts['.$s['nis'].']', 0, ['class' => 'form-control', 'placheholder' => 'UTS', 'min' => 0, 'max' => 100]) !!}</td>
+                                                <td class="text-center">{!! Form::number('uas['.$s['nis'].']', 0, ['class' => 'form-control', 'placheholder' => 'UAS', 'min' => 0, 'max' => 100]) !!}</td></td>
                                                 <td class="text-center">Belum Ada Nilai</td>
                                                 <td class="text-center">Belum Ada Nilai</td>
                                             </tr>

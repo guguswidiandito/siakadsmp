@@ -37,12 +37,12 @@ class GuruController extends Controller
             'agama'    => 'required',
             'alamat'   => 'required',
             'no_hp'    => 'required|unique:gurus',
-            'email'    => 'required|unique:users',
+            'username' => 'required|unique:users',
             'password' => 'required|min:6',
         ]);
 
         $user           = new User;
-        $user->email    = $this->request['email'];
+        $user->username = $this->request['username'];
         $user->password = bcrypt($this->request['password']);
         $user->save();
 

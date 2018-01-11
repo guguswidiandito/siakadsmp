@@ -16,7 +16,7 @@ class KelasController extends Controller
 
     public function index()
     {
-        $data['kelas'] = $this->model->semuaKelas()->get();
+        $data['kelas'] = $this->model->semuaKelas()->selectRaw('kelas.id as kelas_id, kelas.kelas as nama_kelas, gurus.nama as nama_guru')->get();
 
         return view('kelas.index', $data);
     }
@@ -45,7 +45,7 @@ class KelasController extends Controller
     public function edit($id)
     {
         $data['wali_kelas'] = User::daftarGuru();
-        $data['kelas']      = $this->model->semua()->find($id);
+        $data['kelas']      = $this->model->semuaKelas()->where('kelas.id', $id)->first();
 
         return view('kelas.edit', $data);
     }

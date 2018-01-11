@@ -17,7 +17,8 @@ class MapelController extends Controller
 
     public function index()
     {
-        $data['mapel'] = $this->model->orderBy('mapel')->get();
+        $data['kelas'] = Kelas::pluck('kelas', 'id');
+        $data['mapel'] = $this->model->where('kelas_id', array($this->request['kelas_id']))->orderBy('mapel')->get();
 
         return view('mapel.index', $data);
     }
@@ -39,10 +40,19 @@ class MapelController extends Controller
         ]);
 
         $mapel = new Mapel($this->request->all());
-        $mapel->save();
 
-        return redirect()->back()
-            ->with('success', 'Mapel berhasil disimpan!');
+        if ($this->existsMapel() == 1) {
+            return redirect()->back()
+                ->with('fail', 'Mapel ' . $this->request['mapel'] . ' dengan guru dan kelas yang anda input sudah ada');
+        } elseif ($this->existsGuru() == 1) {
+            return redirect()->back()
+                ->with('fail', 'Mapel ' . $this->request['mapel'] . ' dengan guru dan kelas yang anda input sudah ada');
+        } else {
+            $mapel->save();
+
+            return redirect()->back()
+                ->with('success', 'Mapel berhasil disimpan!');
+        }
     }
 
     public function edit($id)
@@ -74,7 +84,22 @@ class MapelController extends Controller
         $mapel = $this->model->find($id);
         $mapel->delete();
 
-        return redirect(route('mapel.index'))
+        return redirect()->back()
             ->with('success', 'Mapel berhasil dihapus');
+    }
+
+    protected function existsMapel()
+    {
+        return $this->model->where('mapel', $this->request['mapel'])
+            ->where('kelas_id', $this->request['kelas_id'])
+            ->where('user_id', $this->request['user_id'])
+            ->count();
+    }
+
+    protected function existsGuru()
+    {
+        return $this->model->where('mapel', $this->request['mapel'])
+            ->where('kelas_id', $this->request['kelas_id'])
+            ->count();
     }
 }
