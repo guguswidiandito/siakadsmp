@@ -41,22 +41,17 @@
                             Tanggal     : <b>{{ $tgl_absen }}</b>
                         </div>
                         <div class="panel-body">
+                            <div class="text-center">
+                                <ul class="pagination">
+                                    @foreach (range(1,8 ) as $r)
+                                    <li><a href="{{ url('absen/siswa/?tgl_absen='.$tgl_absen.'&jam_ke='.$r.'&kelas='.request()->kelas) }}">Jam Ke <b>{{$r}}</b></a></li<<a>
+                                    @endforeach
+                                </ul>
+                            </div>
                             <div class="table-responsive">
                                 <fieldset>
-                                    {!! Form::open(array('route' => 'kehadiran.store', 'method' => 'POST')) !!}
-                                    <input type="hidden" name="jam_ke" value="{{ $jam_ke }}">
-                                    <input type="hidden" name="tgl_absen" value="{{ $tgl_absen }}">
                                     <table class="table table-bordered table-condensed table-striped">
                                         <thead>
-                                            <tr>
-                                                <th class="text-center" colspan="8">
-                                                    <div class="btn-group">
-                                                        @foreach (range(1,8) as $r)
-                                                        <a href="{{ url('absen/siswa/?tgl_absen='.$tgl_absen.'&jam_ke='.$r.'&kelas='.request()->kelas) }}" class="btn btn-danger">Jam Ke <b>{{$r}}</b></a>
-                                                        @endforeach
-                                                    </div>
-                                                </th>
-                                            </tr>
                                             <tr>
                                                 <th style="vertical-align: middle;" class="text-center" rowspan="2">NIS</th>
                                                 <th style="vertical-align: middle;" class="text-center" rowspan="2">Nama</th>
@@ -92,6 +87,9 @@
                                             </tr>
                                             @endforeach
                                             @else
+                                            {!! Form::open(array('route' => 'kehadiran.store', 'method' => 'POST')) !!}
+                                            <input type="hidden" name="jam_ke" value="{{ $jam_ke }}">
+                                            <input type="hidden" name="tgl_absen" value="{{ $tgl_absen }}">
                                             <tr>
                                                 <td class="text-center">{{ $s['nis'] }}
                                                     <input type="hidden" name="nis['{{ $s['nis'] }}']" value="{{ $s['nis'] }}">
@@ -114,15 +112,11 @@
                                             @endforelse
                                         </tbody>
                                     </table>
-                                    @foreach ($siswa->take(1)->get() as $s)
-                                    @if ($s->diabsen()->where('jam_ke', request()->jam_ke)->where('tgl_absen', request()->tgl_absen)->count() < 1)
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    @endif
-                                    @endforeach
-                                    <a href="{{ route('kehadiran.index') }}" class="btn btn-success">Kembali</a>
-                                    {!! Form::close() !!}
                                 </fieldset>
                             </div>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a href="{{ route('kehadiran.index') }}" class="btn btn-success">Kembali</a>
+                            {!! Form::close() !!}
                         </div>
                     </div>
                 </div>

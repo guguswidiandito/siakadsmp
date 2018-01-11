@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Kelas;
 use App\Siswa;
 use Auth;
@@ -49,15 +48,19 @@ class KehadiranController extends Controller
 
     public function store()
     {
-        $this->validate($this->request, [
-            'absen' => 'required',
-        ], [
-            'absen.required' => 'Silahkan isi semua absen siswa pada Jam Ke: '.$this->request['jam_ke'].' dan Tanggal: '.$this->request['tgl_absen'].' sebelum di simpan'
-        ]);
+        $this->save($this->request);
 
-        $request = $this->request->except('_token');
+        return redirect()->back()
+            ->with('success', 'Kehadiran berhasil disimpan!');
+    }
 
-        foreach ($this->request->get('nis') as $nis) {
+    protected function save($request)
+    {
+        foreach ($request['nis'] as $key => $nis) {
+
+            $this->validate($request, [
+                'absen.' . $nis => 'required',
+            ]);
 
             $absen = $request['absen'][$nis];
 
@@ -80,8 +83,5 @@ class KehadiranController extends Controller
                 ],
             ]);
         }
-
-        return redirect()->back()
-            ->with('success', 'Kehadiran berhasil disimpan!');
     }
 }

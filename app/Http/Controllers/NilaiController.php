@@ -82,7 +82,7 @@ class NilaiController extends Controller
             ->with('success', 'Nilai berhasil diupdate');
     }
 
-    public function kelas()
+    public function mapel()
     {
         return Mapel::where('user_id', Auth::id())
             ->where('kelas_id', $this->request['kelas'])
@@ -91,13 +91,13 @@ class NilaiController extends Controller
 
     protected function save($request)
     {
-        foreach ($request['nis'] as $nis) {
+        foreach ($request['nis'] as $key => $nis) {
 
-            // $this->validate($this->request, [
-            //     'harian' . $nis  => 'required|numeric|between:0,100',
-            //     'uts' . $nis    => 'required|numeric|between:0,100',
-            //     'uas' . $nis     => 'required|numeric|between:0,100',
-            // ]);
+            $this->validate($this->request, [
+                'harian.*' => 'required|numeric|between:0,100',
+                'uts.*'    => 'required|numeric|between:0,100',
+                'uas.*'    => 'required|numeric|between:0,100',
+            ]);
 
             Auth::user()->menilai()->attach([
                 $nis => [
@@ -109,11 +109,5 @@ class NilaiController extends Controller
                 ],
             ]);
         }
-    }
-
-    protected function redirect(array $data)
-    {
-        return redirect()->back()
-            ->with('fail', 'field' . $data . ' tidak boleh kosong');
     }
 }

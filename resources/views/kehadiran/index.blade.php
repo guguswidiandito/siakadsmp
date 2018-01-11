@@ -21,7 +21,7 @@
                                 </div>
                                 <div class="form-group {{ $errors->has('jam_ke') ? "has-error" : "" }}">
                                     {!! Form::label('jam_ke', 'Jam Ke', ['class' => 'control-label']) !!}
-                                    {!! Form::selectRange('jam_ke', 1, 8, null, ['class' => 'form-control', 'placeholder' => 'Pilih']) !!}
+                                    {!! Form::selectRange('jam_ke', 1, 7, null, ['class' => 'form-control', 'placeholder' => 'Pilih']) !!}
                                     <p class="help-block">{!! $errors->first('jam_ke') !!}</p>
                                 </div>
                                 <div class="form-group {{ $errors->has('kelas') ? "has-error" : "" }}">

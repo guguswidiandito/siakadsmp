@@ -63,7 +63,7 @@ Route::group(['middleware' => ['web', 'auth', 'role:guru']], function () {
     Route::group(['prefix' => 'nilai'], function () {
         Route::get('/', 'NilaiController@index')->name('nilai.index');
         Route::get('/siswa', 'NilaiController@siswa')->name('nilaiSiswaPerKelas');
-        Route::get('/siswa/kelas', 'NilaiController@kelas')->name('kelas');
+        Route::get('/siswa/kelas', 'NilaiController@mapel')->name('mapel');
         Route::get('/{id}', 'NilaiController@edit')->name('nilai.edit');
         Route::put('/{id}', 'NilaiController@update')->name('nilai.update');
         Route::post('/', 'NilaiController@store')->name('nilai.store');
