@@ -45,9 +45,9 @@ public function username()
 Demo : http://adminsys.tk/
 
 --login admin 
-email : administrator@gmail.com
+username : administrator
 password : rahasia
 
 --login guru/walikelas
-email : guguswidiandito@gmail.com
+username : guguswidiandito
 password : rahasia
