@@ -25,13 +25,13 @@ class UserSeeder extends Seeder
         $guruRole->save();
 
         $admin           = new User;
-        $admin->email    = 'administrator@gmail.com';
+        $admin->username = 'administrator';
         $admin->password = bcrypt('rahasia');
         $admin->save();
         $admin->attachRole($adminRole);
 
         $user           = new User;
-        $user->email    = 'guguswidiandito@gmail.com';
+        $user->username = 'guguswidiandito';
         $user->password = bcrypt('rahasia');
         $user->save();
         $user->attachRole($guruRole);

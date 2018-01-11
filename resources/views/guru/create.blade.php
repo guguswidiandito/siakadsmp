@@ -40,10 +40,10 @@
                         {!! Form::text('no_hp', null, ['class' => 'form-control', 'placeholder' => 'No HP']) !!}
                         <p class="help-block">{!! $errors->first('no_hp') !!}</p>
                     </div>
-                    <div class="form-group {{ $errors->has('email') ? "has-error" : "" }}">
-                        {!! Form::label('email', 'Email', ['class' => 'control-label']) !!}
-                        {!! Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Username']) !!}
-                        <p class="help-block">{!! $errors->first('email') !!}</p>
+                    <div class="form-group {{ $errors->has('username') ? "has-error" : "" }}">
+                        {!! Form::label('username', 'Username', ['class' => 'control-label']) !!}
+                        {!! Form::text('username', null, ['class' => 'form-control', 'placeholder' => 'Username']) !!}
+                        <p class="help-block">{!! $errors->first('username') !!}</p>
                     </div>
                     <div class="form-group {{ $errors->has('password') ? "has-error" : "" }}">
                         {!! Form::label('password', 'Password', ['class' => 'control-label']) !!}
