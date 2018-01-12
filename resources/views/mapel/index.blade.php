@@ -15,12 +15,12 @@
                             <a href="{{ route('mapel.create') }}" class="btn btn-danger">Tambah Data</a>
                         </div>
                         <div class="panel-body">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <div class="panel-title">
                                         {!! Form::open(['url' => 'mapel/', 'method' => 'GET', 'class' => 'form-inline']) !!}
-                                        {!! Form::select('kelas_id', $kelas, null, ['class' => 'form-control', 'placeholder' => 'Pilih', 'required']) !!}
-                                        {!! Form::submit('Lihat Data', ['class' => 'btn btn-default']) !!}
+                                        {!! Form::select('kelas_id', $kelas, null, ['class' => 'form-control', 'placeholder' => 'Pilih kelas', 'required']) !!}
+                                        {!! Form::submit('filter', ['class' => 'btn btn-primary']) !!}
                                         {!! Form::close() !!}
                                     </div>
                                 </div>
@@ -29,6 +29,7 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
+                                            <th class="text-center">#</th>
                                             <th class="text-center">Mapel</th>
                                             <th class="text-center">Kelas</th>
                                             <th class="text-center">Guru</th>
@@ -37,8 +38,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($mapel) > 0)
-                                        @foreach ($mapel as $m)
+                                        @foreach ($mapel as $key => $m)
                                         <tr>
+                                            <td class="text-center">{{ ++$key }}</td>
                                             <td class="text-center">{{ $m['mapel'] }}</td>
                                             <td class="text-center">{{ $m['kelas']['kelas'] }}</td>
                                             <td class="text-center">{{ $m['user']['guru']['nama'] }}</td>

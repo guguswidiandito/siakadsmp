@@ -15,6 +15,18 @@
                             <a href="{{ route('siswa.create') }}" class="btn btn-danger">Tambah Data</a>
                         </div>
                         <div class="panel-body">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="panel-title">
+                                        {!! Form::open(['url' => 'siswa/', 'method' => 'GET', 'class' => 'form-inline']) !!}
+                                        {!! Form::select('kelas_id', $kelas, null, ['class' => 'form-control', 'placeholder' => 'Pilih kelas', 'required']) !!}
+                                        {!! Form::selectRange('tahun_masuk', 2010, date('Y'), null, ['class' => 'form-control', 'placeholder' => 'Pilih tahun']) !!}
+                                        {!! Form::text('q', isset($q) ? $q : null, ['class' => 'form-control', 'placeholder' => 'NIS / Nama']) !!}
+                                        {!! Form::submit('Search / Filter', ['class' => 'btn btn-primary']) !!}
+                                        {!! Form::close() !!}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
@@ -49,6 +61,7 @@
                                         @endif
                                     </tbody>
                                 </table>
+                                {!! $siswa->appends(compact('kelas_id', 'tahun_masuk', 'q'))->links() !!}
                             </div>
                         </div>
                     </div>

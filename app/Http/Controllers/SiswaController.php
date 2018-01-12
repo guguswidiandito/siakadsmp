@@ -16,10 +16,29 @@ class SiswaController extends Controller
 
     public function index()
     {
-        $data['siswa'] = $this->model->semuaSiswa()
-            ->selectRaw('siswas.nis as nis, siswas.nama as nama_siswa, gurus.nama as nama_guru, kelas as nama_kelas')
-            ->get();
+        $q           = $this->request['q'];
+        $tahun_masuk = $this->request['tahun_masuk'];
+        $kelas_id    = $this->request['kelas_id'];
 
+        $kelas = Kelas::pluck('kelas', 'id');
+        $siswa = $this->model->semuaSiswa()
+            ->where('kelas_id', 'LIKE', "%{$kelas_id}%")
+            ->where('tahun_masuk', 'LIKE', "%{$tahun_masuk}%")
+            ->where(function ($query) use ($q) {
+                $query->where('siswas.nis', 'LIKE', "%{$q}%")
+                    ->orWhere('siswas.nama', 'LIKE', "%{$q}%");
+            })
+            ->selectRaw('siswas.nis as nis, siswas.nama as nama_siswa, gurus.nama as nama_guru, kelas as nama_kelas')
+            ->paginate(10);
+
+        $data = [
+            'q'           => $q,
+            'tahun_masuk' => $tahun_masuk,
+            'kelas_id'    => $kelas_id,
+            'kelas'       => $kelas,
+            'siswa'       => $siswa,
+        ];
+        
         return view('siswa.index', $data);
     }
 

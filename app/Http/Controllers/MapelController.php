@@ -18,7 +18,7 @@ class MapelController extends Controller
     public function index()
     {
         $data['kelas'] = Kelas::pluck('kelas', 'id');
-        $data['mapel'] = $this->model->where('kelas_id', array($this->request['kelas_id']))
+        $data['mapel'] = $this->model->where('kelas_id', 'LIKE', "%{$this->request['kelas_id']}%")
             ->orderBy('mapel')
             ->get();
 
@@ -67,16 +67,23 @@ class MapelController extends Controller
     public function update($id)
     {
         $this->validate($this->request, [
-            'mapel'   => 'required',
-            'kelas'   => 'required',
-            'user_id' => 'required',
+            'mapel'    => 'required',
+            'kelas_id' => 'required',
+            'user_id'  => 'required',
         ]);
 
         $mapel = $this->model->find($id);
-        $mapel->update($this->request->all());
 
-        return redirect()->back()
-            ->with('success', 'Mapel berhasil diupdate');
+        if ($this->existsMapel($this->request) == 1) {
+            return $this->redirect($this->request['mapel']);
+        } elseif ($this->existsGuru($this->request) == 1) {
+            return $this->redirect($this->request['mapel']);
+        } else {
+            $mapel->update($this->request->all());
+
+            return redirect()->back()
+                ->with('success', 'Mapel berhasil diupdate');
+        }
     }
 
     public function destroy($id)

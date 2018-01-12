@@ -86,6 +86,7 @@ class NilaiController extends Controller
     {
         return Mapel::where('user_id', Auth::id())
             ->where('kelas_id', $this->request['kelas'])
+            ->select('id','mapel')
             ->get();
     }
 

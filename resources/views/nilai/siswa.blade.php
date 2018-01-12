@@ -1,20 +1,15 @@
 @extends('layouts.app')
 @push('error')
 @if ($errors->any())
-<div class="container">
+<div class="container-fluid">
     <div class="alert alert-danger">
-        <b>Error(s):</b>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+        <b>Warning!</b> Harap isi semua form!
     </div>
 </div>
 @endif
 @endpush
 @section('content')
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-danger">
@@ -62,12 +57,12 @@
                                                 <tr>
                                                     <th style="vertical-align: middle;" class="text-center" rowspan="2">NIS</th>
                                                     <th style="vertical-align: middle;" class="text-center" rowspan="2">Nama</th>
-                                                    <th class="text-center" colspan="4">Nilai</th>
-                                                    <th class="text-center" rowspan="2" style="vertical-align: middle;">Aksi</th>
+                                                    <th class="text-center" colspan="6">Nilai</th>
+                                                    <th class="text-center" rowspan="2" style="vertical-align: middle;">Status</th>
                                                 </tr>
                                                 <tr>
                                                     @php
-                                                    $array = ['Harian (20%)', 'UTS (30%)', 'UAS (50%)', 'Nilai Akhir'];
+                                                    $array = ['Harian (20%)', 'UTS (30%)', 'UAS (50%)', 'Nilai Akhir', 'KKM', 'Predikat'];
                                                     @endphp
                                                     @foreach ($array as $arr)
                                                     <th class="text-center">{{ $arr }}</th>
@@ -79,6 +74,10 @@
                                                 @if ($s->dinilai()->where('tahun_ajaran', request()->tahun_ajaran)->where('mapel_id', request()->mapel_id)->count() > 0)
                                                 @foreach ($s->dinilai()->where('tahun_ajaran', request()->tahun_ajaran)->where('mapel_id', request()->mapel_id)->get() as $k)
                                                 <tr>
+                                                    @php
+                                                    $akhir = ($k['pivot']['harian']*0.2)+($k['pivot']['uts']*0.3)+($k['pivot']['uas']*0.5);
+                                                    $kkm = 75;
+                                                    @endphp
                                                     <td class="text-center">{{ $s['nis'] }}
                                                     </td>
                                                     <td>{{ $s['nama'] }}</td>
@@ -86,12 +85,29 @@
                                                     <td class="text-center">{{ $k['pivot']['uts'] }}</td>
                                                     <td class="text-center">{{ $k['pivot']['uas'] }}</td>
                                                     <td class="text-center">
+                                                        {{ $akhir }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ $kkm }}
+                                                    </td>
+                                                    <td class="text-center">
                                                         @php
-                                                        $akhir = ($k['pivot']['harian']*0.2)+($k['pivot']['uts']*0.3)+($k['pivot']['uas']*0.5);
-                                                        echo $akhir;
+                                                        if ($akhir > 85) {
+                                                        echo 'A';
+                                                        } elseif ($akhir > 75) {
+                                                        echo 'B';
+                                                        } else {
+                                                        echo 'C';
+                                                        }
                                                         @endphp
                                                     </td>
-                                                    <td class="text-center"><a href="{{ url('nilai/'.$k['pivot']['id']) }}" class="btn btn-xs btn-primary" target="_blank">Edit</a></td>
+                                                    <td class="text-center">
+                                                        @if ($akhir < $kkm)
+                                                        <a href="{{ url('nilai/'.$k['pivot']['id']) }}" class="btn btn-xs btn-primary" target="_blank">Remidi</a>
+                                                        @else
+                                                        Lulus
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                                 @else
@@ -103,11 +119,13 @@
                                                         <input type="hidden" name="nis['{{ $s['nis'] }}']" value="{{ $s['nis'] }}">
                                                     </td>
                                                     <td>{{ $s['nama'] }}</td>
-                                                    <td width="100" class="text-center">{!! Form::number('harian['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'Harian']) !!}</td>
-                                                    <td width="100" class="text-center">{!! Form::number('uts['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'UTS']) !!}</td>
-                                                    <td  width="100"class="text-center">{!! Form::number('uas['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'UAS']) !!}</td></td>
-                                                    <td class="text-center">Belum Ada Nilai</td>
-                                                    <td class="text-center">Belum Ada Nilai</td>
+                                                    <td width="100" class="text-center {{ $errors->has('harian.'.$s['nis']) ? "has-error" : "" }}">{!! Form::number('harian['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'Harian']) !!}</td>
+                                                    <td width="100" class="text-center {{ $errors->has('uts.'.$s['nis']) ? "has-error" : "" }}">{!! Form::number('uts['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'UTS']) !!}</td>
+                                                    <td  width="100"class="text-center {{ $errors->has('uas.'.$s['nis']) ? "has-error" : "" }}">{!! Form::number('uas['.$s['nis'].']', null, ['class' => 'form-control', 'placheholder' => 'UAS']) !!}</td></td>
+                                                    <td class="text-center">Belum dinilai</td>
+                                                    <td class="text-center">76</td>
+                                                    <td class="text-center">Belum dinilai</td>
+                                                    <td class="text-center">Belum dinilai</td>
                                                 </tr>
                                                 @endif
                                                 @empty
